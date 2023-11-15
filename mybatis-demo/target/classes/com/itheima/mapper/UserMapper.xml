@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    下面的namespace指的是一个名称空间, 可以暂时随便取名
+
+-->
+<mapper namespace="com.itheima.mapper.UserMapper">
+    <!--这里的名称空间需要在之后创建一个类-->
+    <!--<select id="selectAll" resultType="com.itheima.pojo.User">-->
+    <select id="selectAll" resultType="User"><!--通过在mybatis-config.xml的配置文件中设置别名后就可以在Mapper中直接用解析类之后的类名就行不用加包名-->
+        <!--id是SQL语句的唯一标识, resultType是对应的返回结果的一个类型, 也就是对应的实体类的类型-->
+        select *
+        from tb_user;
+    </select>
+</mapper>
