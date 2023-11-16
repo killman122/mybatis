@@ -15,4 +15,9 @@
         select *
         from tb_user;
     </select>
+
+    <select id="selectById" resultType="User">
+        select *
+        from tb_user where id = #{id};<!--这里使用#的方式和django中的前端部分功能存在语法-->
+    </select>
 </mapper>

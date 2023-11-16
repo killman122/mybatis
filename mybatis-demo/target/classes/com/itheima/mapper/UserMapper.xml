@@ -9,9 +9,15 @@
 <mapper namespace="com.itheima.mapper.UserMapper">
     <!--这里的名称空间需要在之后创建一个类-->
     <!--<select id="selectAll" resultType="com.itheima.pojo.User">-->
+    <!--这里的select也可以叫做statement就是执行SQL的对象, 不过这里是一个标签, 另外statement中的sql语句需要和Mapper接口中的抽象方法对应-->
     <select id="selectAll" resultType="User"><!--通过在mybatis-config.xml的配置文件中设置别名后就可以在Mapper中直接用解析类之后的类名就行不用加包名-->
         <!--id是SQL语句的唯一标识, resultType是对应的返回结果的一个类型, 也就是对应的实体类的类型-->
         select *
         from tb_user;
+    </select>
+
+    <select id="selectById" resultType="User">
+        select *
+        from tb_user where id = #{id};<!--这里使用#的方式和django中的前端部分功能存在语法-->
     </select>
 </mapper>
