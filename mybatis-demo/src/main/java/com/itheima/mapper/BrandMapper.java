@@ -37,4 +37,23 @@ public interface BrandMapper {
 //    public List<Brand> selectByCondition(Brand brand);
     //第三种方式使用Map双例集合的方式传入
     public List<Brand> selectByCondition(Map map);
+
+    /*单条件多种条件选择的条件查询*/
+    List<Brand> selectByConditionSingle(Brand brand);
+
+    /*
+     * 添加数据
+     */
+    public void add(Brand brand);
+
+    /**
+     * 修改全部, 也是静态修改
+     */
+    int update(Brand brand);
+
+    /**
+     * 动态修改
+     */
+    int update2(Brand brand);
+
 }

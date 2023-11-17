@@ -33,10 +33,10 @@
         <result column="company_name" property="companyName"/>
     </resultMap>
 
-    <select id="selectAll" resultMap="brandResultMap"><!--resultMap参数在这里放置之前的resultMap标签的id值作为唯一的标识-->
-    select
-    *
-    from tb_brand;
+    <select id="selectAll" resultMap="brandResultMap">
+        <!--resultMap参数在这里放置之前的resultMap标签的id值作为唯一的标识-->
+        select *
+        from tb_brand;
     </select>
 
 
@@ -59,11 +59,11 @@
     </select>-->
 
     <!--原版第一代-->
-<!--    <select id="selectAll" resultType="brand">-->
-<!--        select-->
-<!--            *-->
-<!--        from tb_brand;-->
-<!--    </select>-->
+    <!--    <select id="selectAll" resultType="brand">-->
+    <!--        select-->
+    <!--            *-->
+    <!--        from tb_brand;-->
+    <!--    </select>-->
 
     <!--根据id查询对应的select标签-->
     <!--
@@ -81,14 +81,15 @@
 
     -->
 
-    
+
     <select id="selectById" resultMap="brandResultMap" parameterType="int">
         <!--使用#{}的方式将id以参数的形式传入-->
         <!--select *
         from tb_brand where id = #{id};&lt;!&ndash;这里的参数id一般情况下和接口中对应的参数名称保持一致&ndash;&gt;-->
         <!--使用${}的方式将id以-->
         select *
-        from tb_brand where id = #{id};<!--这里的参数id一般情况下和接口中对应的参数名称保持一致-->
+        from tb_brand
+        where id = #{id};<!--这里的参数id一般情况下和接口中对应的参数名称保持一致-->
     </select>
 
     <!--<select id="selectById" resultMap="brandResultMap" parameterType="int">
@@ -141,12 +142,13 @@
     <select id="selectByCondition" resultMap="brandResultMap">
         select *
         from tb_brand
-<!--        where-->
+        <!--        where-->
         <where>
             <if test="status != null">
                 status = #{status}
             </if>
-            <if test="companyName != null and companyName !='' "><!--因为需要使用赋值的值的变量名,不能使用在数据库中的字段名称-->
+            <if test="companyName != null and companyName != ''">
+                <!--因为需要使用赋值的值的变量名,不能使用在数据库中的字段名称-->
                 and company_name like CONCAT('%', #{companyName}, '%')
             </if>
             <if test="brandName != null and brandName != ''">
@@ -169,4 +171,72 @@
             and brand_name like #{brandName}
         </if>
     </select>-->
+
+    <select id="selectByConditionSingle" resultMap="brandResultMap">
+        select *
+        from tb_brand
+        <where>
+            <choose>
+                <!--相当于定义了一个switch选择-->
+                <when test="status != null">
+                    <!--@ignoreSql-->
+                    <!--相当于使用case语句进行判别-->
+                    status = #{status}
+                </when>
+                <when test="companyName != null and companyName != ''">
+                    <!--@ignoreSql-->
+                    <!--相当于使用case语句进行判别-->
+                    company_name like CONCAT('%', #{companyName}, '%')
+                </when>
+                <when test="brandName != null and brandName != ''">
+                    <!--@ignoreSql-->
+                    <!--相当于使用case语句进行判别-->
+                    brand_name like CONCAT('%', #{brandName}, '%')
+                </when>
+                <otherwise>
+                    1 = 1;
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        <!--注意在填写sql时表中的字段是不变的, 但是需要操作的数值都是通过创建的Java实体类的对象传入,传入的字段就是Java中的对象的属性-->
+        insert into tb_brand (brand_name, company_name, ordered, description, status)
+        values (#{brandName}, #{companyName}, #{ordered}, #{description}, #{status});
+    </insert>
+
+    <update id="update">
+        update tb_brand
+        set brand_name   = #{brandName},
+            company_name = #{companyName},
+            ordered      = #{ordered},
+            status       = #{status},
+            description  = #{description}
+        where id = #{id};
+    </update>
+
+    <update id="update2">
+        update tb_brand
+        <set>
+            <if test="brandName != null and brandName != ''">
+                brand_name = #{brandName},
+            </if>
+            <if test="companyName != null and companyName != ''">
+                company_name = #{companyName},
+            </if>
+            <if test="ordered != null">
+                ordered = #{ordered},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description}
+            </if>
+        </set>
+        <where>
+            id = #{id};
+        </where>
+    </update>
 </mapper>
