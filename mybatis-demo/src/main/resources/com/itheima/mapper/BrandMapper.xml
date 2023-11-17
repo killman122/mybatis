@@ -239,4 +239,26 @@
             id = #{id};
         </where>
     </update>
+
+    <delete id="deleteById">
+        delete
+        from tb_brand
+        where id = #{id};
+    </delete>
+
+    <!--
+    mybatis会将数组的参数封装为一个Map集合, 这个Map集合是一个0双例集合存在着key和value的对应关系
+        * 默认: key的名称在集合中叫做array , 对应的value就是数组的值
+            因为在双例集合中获取值需要使用key, 所以在sql语句中需要使用array作为key获取对应的值(注: 原本在sql语句中的参数名称就是array,并且双例集合map通过get的方法获取值)
+            或者使用@Param注解改变key对应的名称之间的映射关系
+            在Mapper接口中void deleteByIds(@Param("ids") Integer[] ids);  在xml文件中使用#{ids}获取对应的值
+    -->
+    <delete id="deleteByIds">
+        delete
+        from tb_brand
+        where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

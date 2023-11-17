@@ -1,9 +1,7 @@
 package com.itheima.mapper;
 
 import com.itheima.pojo.Brand;
-import org.apache.ibatis.annotations.Param;
 
-import javax.jws.Oneway;
 import java.util.List;
 import java.util.Map;
 
@@ -55,5 +53,17 @@ public interface BrandMapper {
      * 动态修改
      */
     int update2(Brand brand);
+
+    /**
+     * 删除单行
+     */
+    int deleteById(int id);
+
+    /**
+     * 删除多行根据id数组进行删除
+     *
+     * @return
+     */
+    int deleteByIds(int[] ids);
 
 }

@@ -300,7 +300,7 @@ public class MyBatisTest {
     public void testUpdate2() throws Exception {
         //接收选择商品的商品id参数
         int id = 8;
-        String companyname = "东东能源";
+//        String companyname = "东东能源";
 //        String brandname = "王道强权";
 //        int ordered = 1;
 //        String description = "数字世界";
@@ -324,12 +324,102 @@ public class MyBatisTest {
         //第二种方式需要将参数封装成对象
         Brand brand = new Brand();
         brand.setId(id);
-        brand.setCompanyName(companyname);
+//        brand.setCompanyName(companyname);
+        brand.setStatus(0);
+
 
         //4. 执行方法
         int update = brandMapper.update2(brand);
         System.out.println(update);
 
+        //由于在MyBatis中默认关闭了事务的提交, 所以需要手动提交事务, 由于使用sqlSession对象执行sql所以也需要使用sqlSession对象提交事务
+        //如果在获取sqlSession对象的时候填写了boolean类型的变量确定是否开启自动提交,如果为true则表示自动提交, 反之手动提交
+//        sqlSession.commit();
+
+        //释放资源
+        sqlSession.close();
+        inputStream.close();
+
+    }
+
+    @Test
+    public void testDeleteById() throws Exception {
+        //接收选择商品的商品id参数
+        int id = 8;
+//        String companyname = "东东能源";
+//        String brandname = "王道强权";
+//        int ordered = 1;
+//        String description = "数字世界";
+
+        // 处理参数也可以将Java中的对应的参数添加% 实现模糊查询中的类似于贪婪匹配的方法, 就不需要在Mapper的sql中再写
+//        companyname = "%" + companyname + "%";
+//        brandname = "%" + brandname + "%";
+
+        //1. 加载核心配置文件, 获取 SqlSessionFactory对象 , 用于创建 SqlSession对象, 直接从网页中复制构建工厂的代码
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+        //2. 获取SqlSession对象, 用于执行sql
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+
+        //3.获取Mapper接口的代理对象
+        BrandMapper brandMapper = sqlSession.getMapper(BrandMapper.class);
+
+//        //第二种方式需要将参数封装成对象
+//        Brand brand = new Brand();
+//        brand.setId(id);
+////        brand.setCompanyName(companyname);
+//        brand.setStatus(0);
+
+
+        //4. 执行方法
+        int i = brandMapper.deleteById(id);
+        System.out.println(i);
+        //由于在MyBatis中默认关闭了事务的提交, 所以需要手动提交事务, 由于使用sqlSession对象执行sql所以也需要使用sqlSession对象提交事务
+        //如果在获取sqlSession对象的时候填写了boolean类型的变量确定是否开启自动提交,如果为true则表示自动提交, 反之手动提交
+//        sqlSession.commit();
+
+        //释放资源
+        sqlSession.close();
+        inputStream.close();
+
+    }
+
+    @Test
+    public void testDeleteByIds() throws Exception {
+        //接收选择商品的商品id参数
+        int [] ids = {6,7,9};
+//        String companyname = "东东能源";
+//        String brandname = "王道强权";
+//        int ordered = 1;
+//        String description = "数字世界";
+
+        // 处理参数也可以将Java中的对应的参数添加% 实现模糊查询中的类似于贪婪匹配的方法, 就不需要在Mapper的sql中再写
+//        companyname = "%" + companyname + "%";
+//        brandname = "%" + brandname + "%";
+
+        //1. 加载核心配置文件, 获取 SqlSessionFactory对象 , 用于创建 SqlSession对象, 直接从网页中复制构建工厂的代码
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+        //2. 获取SqlSession对象, 用于执行sql
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+
+        //3.获取Mapper接口的代理对象
+        BrandMapper brandMapper = sqlSession.getMapper(BrandMapper.class);
+
+//        //第二种方式需要将参数封装成对象
+//        Brand brand = new Brand();
+//        brand.setId(id);
+////        brand.setCompanyName(companyname);
+//        brand.setStatus(0);
+
+
+        //4. 执行方法
+        int i = brandMapper.deleteByIds(ids);
+        System.out.println(i);
         //由于在MyBatis中默认关闭了事务的提交, 所以需要手动提交事务, 由于使用sqlSession对象执行sql所以也需要使用sqlSession对象提交事务
         //如果在获取sqlSession对象的时候填写了boolean类型的变量确定是否开启自动提交,如果为true则表示自动提交, 反之手动提交
 //        sqlSession.commit();
